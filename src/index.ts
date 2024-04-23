@@ -1,5 +1,5 @@
-import { Plugin as NineSlicePlugin } from 'phaser3-nineslice'
 
+import Phaser from "phaser";
 import MainMenu from "./scenes/MenuScene";
 import { GameScene } from "./scenes/GameScene";
 import { LoadingScene } from "./scenes/LoadingScene";
@@ -13,9 +13,6 @@ new Phaser.Game({
         height: 1080,
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
-    },
-    plugins: {
-        global: [ NineSlicePlugin.DefaultCfg ]
     },
     physics: {
         default: 'arcade',

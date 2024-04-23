@@ -17,7 +17,6 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "phaser": "^3.55.2",
-    "phaser3-nineslice": "^0.5.0"
+    "phaser": "^3.55.2"
   }
 }

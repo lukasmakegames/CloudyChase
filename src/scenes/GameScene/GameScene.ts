@@ -5,6 +5,16 @@ import { GAME_OVER_SCENE, GAME_SCENE } from "../../constants/scenes";
 import { BaseScene } from "../BaseScene";
 import { INTERACT_EVENT } from "./events";
 
+// @TODO add health bar dino
+// @TODO add damage red tint dino
+// @TODO customize color palette assets
+// @TODO food add power
+// @TODO power bar
+// @TODO special attack
+// @TODO add trail or particles
+
+
+
 export class GameScene extends BaseScene {
 
     protected static readonly BIRD_GRAVITY = 400;
@@ -137,7 +147,6 @@ export class GameScene extends BaseScene {
                 this.ball.y=this.dino.y;
                 if(this.dino.y<this.nextDinoPosY+64 && this.dino.y>this.nextDinoPosY-64)
                     {
-                        console.log(this.nextDinoPosY)
                         this.lastDinoPosY=this.nextDinoPosY;
                         this.nextDinoPosY=-1;
                     }
@@ -222,10 +231,10 @@ export class GameScene extends BaseScene {
 
             if (spawn == 0) {
 
-                // @ts-ignore
-                const pTop = this.add.nineslice(spawnPipesX, topPipeHeight, 26, topPipeHeight, { key: 'pipe', frame: this.pipeFrameIndex }, 26)
+                const pTop = this.add.tileSprite(spawnPipesX, topPipeHeight, 52, topPipeHeight, 'pipe', this.pipeFrameIndex )
                     .setFlipY(true)
                     .setOrigin(0.5, 1);
+
                 this.physics.add.existing(pTop, false);
                 this.pipes.add(pTop);
                 setupPipeBody(pTop.body as Phaser.Physics.Arcade.Body);
@@ -234,8 +243,7 @@ export class GameScene extends BaseScene {
 
             if (spawn == 1) {
 
-                // @ts-ignore
-                const pBottom = this.add.nineslice(spawnPipesX, availableHeight, 26, bottomPipeHeight, { key: 'pipe', frame: this.pipeFrameIndex }, 26)
+                const pBottom = this.add.tileSprite(spawnPipesX, availableHeight, 52, bottomPipeHeight, 'pipe', this.pipeFrameIndex )
                     .setOrigin(0.5, 1);
                 this.physics.add.existing(pBottom, false);
                 this.pipes.add(pBottom);
@@ -248,7 +256,6 @@ export class GameScene extends BaseScene {
 
             if(this.nextDinoPosY==-1){
                 this.nextDinoPosY = spawn == 0 ? topPipeHeight +((screenHeight - scoreZoneHeight)/2) : topPipeHeight/2;
-                console.log("spawn,",this.nextDinoPosY)
 
             }
         }

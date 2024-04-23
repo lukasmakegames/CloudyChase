@@ -8,7 +8,7 @@ export class LoadingScene extends BaseScene {
 
     public preload() {
         this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.fnt');
-        this.load.image('bg', this._getBackgroundImage());
+        this.load.image('bg', 'assets/images/background-night.png');
         this.load.image('landscape', 'assets/images/base.png');
         this.load.image("left_menu_image", "assets/images/main-menu-image.png");
         this.load.image('bird', 'assets/images/avatar.png');
@@ -33,7 +33,7 @@ export class LoadingScene extends BaseScene {
                 start: 0,
                 end: 3
             }),
-            frameRate: 16,
+            frameRate: 10,
             repeat: -1
         })
 
@@ -43,11 +43,5 @@ export class LoadingScene extends BaseScene {
 
     protected toMainMenu() {
         this.scene.start(MAIN_MENU_SCENE)
-    }
-
-
-    private _getBackgroundImage() {
-        const image = Phaser.Math.Between(0, 1) ? 'background-day' : 'background-night';
-        return `assets/images/${image}.png`;
     }
 }
