@@ -1,0 +1,104 @@
+{
+	"textures": [
+		{
+			"image": "dino.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1008,
+				"h": 200
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Fly_000.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 252,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 252,
+						"h": 200
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 252,
+						"h": 200
+					}
+				},
+				{
+					"filename": "Fly_001.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 252,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 252,
+						"h": 200
+					},
+					"frame": {
+						"x": 252,
+						"y": 0,
+						"w": 252,
+						"h": 200
+					}
+				},
+				{
+					"filename": "Fly_002.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 252,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 252,
+						"h": 200
+					},
+					"frame": {
+						"x": 504,
+						"y": 0,
+						"w": 252,
+						"h": 200
+					}
+				},
+				{
+					"filename": "Fly_003.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 252,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 252,
+						"h": 200
+					},
+					"frame": {
+						"x": 756,
+						"y": 0,
+						"w": 252,
+						"h": 200
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:d3aab782ec666bcca00cf060e9f61be2:716e798a0f6ad289ec822a8b22d4922d:604dd05d6aaab271297d13217355623b$"
+	}
+}

@@ -1,0 +1,62 @@
+{
+	"textures": [
+		{
+			"image": "pipes.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 104,
+				"h": 320
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "pipe-green.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 52,
+						"h": 320
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 52,
+						"h": 320
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 52,
+						"h": 320
+					}
+				},
+				{
+					"filename": "pipe-red.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 52,
+						"h": 320
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 52,
+						"h": 320
+					},
+					"frame": {
+						"x": 52,
+						"y": 0,
+						"w": 52,
+						"h": 320
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:7e6905b1ea4744fdc829ed4cb2f0dbe5:87e819a6ffaaea068d4c7878c552dec4:ba8c223a80aac7c3b6b4cf2f3a597823$"
+	}
+}
