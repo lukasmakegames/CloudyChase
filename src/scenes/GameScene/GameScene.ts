@@ -7,12 +7,9 @@ import { INTERACT_EVENT } from "./events";
 
 // @TODO add health bar dino
 // @TODO add damage red tint dino
-// @TODO customize color palette assets
 // @TODO food add power
 // @TODO power bar
 // @TODO special attack
-// @TODO add trail or particles
-
 
 
 export class GameScene extends BaseScene {
@@ -52,6 +49,9 @@ export class GameScene extends BaseScene {
 
     protected lastDinoPosY: number = -1;
     protected nextDinoPosY: number = -1;
+
+    protected emitter: Phaser.GameObjects.Particles.ParticleEmitter;
+
     constructor() {
         super(GAME_SCENE);
     }
@@ -66,9 +66,9 @@ export class GameScene extends BaseScene {
         this.isTurned = false;
         this.score = 0;
 
-        this.nextDinoPosY=-1;
-        const { screenHeight } = this.getScreenSize();
-        this.lastDinoPosY=screenHeight/2;
+        this.nextDinoPosY = -1;
+        const { screenHeight, screenWidth } = this.getScreenSize();
+        this.lastDinoPosY = screenHeight / 2;
 
         this._setupBackground();
         this._setupLandscape();
@@ -99,6 +99,13 @@ export class GameScene extends BaseScene {
 
         this.time.addEvent({ delay: GameScene.SPAWN_PIPES_INTERVAL, callback: this.addPipes, callbackScope: this, loop: true });
         this.time.addEvent({ delay: GameScene.SPAWN_PIPES_INTERVAL * 3, callback: this.deletePipes, callbackScope: this, loop: true });
+
+        this.emitter = this.add.particles(0, 32, 'brush', {
+            speedX: -1000,
+            lifespan: 200,
+            scale: { start: 2, end: 0 },
+            follow: this.bird,
+        });
     }
 
     public update(time: number, d: number) {
@@ -137,20 +144,20 @@ export class GameScene extends BaseScene {
                 }
             });
 
-  
-            if (this.nextDinoPosY>=0 ) {
+
+            if (this.nextDinoPosY >= 0) {
                 let k = 0.03;
                 let interpolationDinoY = Phaser.Math.Interpolation.Bezier(
                     [this.dino.y, this.nextDinoPosY],
                     k);
-                this.dino.y=interpolationDinoY;
-                this.ball.y=this.dino.y;
-                if(this.dino.y<this.nextDinoPosY+64 && this.dino.y>this.nextDinoPosY-64)
-                    {
-                        this.lastDinoPosY=this.nextDinoPosY;
-                        this.nextDinoPosY=-1;
-                    }
-            } 
+                this.dino.y = interpolationDinoY;
+                this.ball.y = this.dino.y;
+                if (this.dino.y < this.nextDinoPosY + 64 && this.dino.y > this.nextDinoPosY - 64) {
+                    this.lastDinoPosY = this.nextDinoPosY;
+                    this.nextDinoPosY = -1;
+                }
+            }
+
         }
     }
 
@@ -188,11 +195,14 @@ export class GameScene extends BaseScene {
             if (!this.isTurned) {
                 this.bird.setVelocityY(-GameScene.baseJumpForce);
                 this.bird.body.setGravityY(-GameScene.BIRD_GRAVITY * 2);
-                this.bird.setFlipY(true)
+                this.bird.setFlipY(true);
+                this.emitter.setY(-32);
             } else {
                 this.bird.setVelocityY(GameScene.baseJumpForce);
                 this.bird.body.setGravityY(GameScene.BIRD_GRAVITY * 2);
-                this.bird.setFlipY(false)
+                this.bird.setFlipY(false);
+                this.emitter.setY(32);
+
             }
             this.isTurned = !this.isTurned;
 
@@ -213,7 +223,7 @@ export class GameScene extends BaseScene {
 
     protected addPipes() {
         if (this.isGameActive) {
-            const { width: pipeFrameWidth } = this.sys.textures.getFrame('pipe', 0); 
+            const { width: pipeFrameWidth } = this.sys.textures.getFrame('pipe', 0);
             const { screenHeight, screenWidth } = this.getScreenSize();
             const availableHeight = screenHeight - this.landscape.height;
             const scoreZoneHeight = screenHeight / 3;
@@ -231,7 +241,7 @@ export class GameScene extends BaseScene {
 
             if (spawn == 0) {
 
-                const pTop = this.add.tileSprite(spawnPipesX, topPipeHeight, 52, topPipeHeight, 'pipe', this.pipeFrameIndex )
+                const pTop = this.add.tileSprite(spawnPipesX, topPipeHeight, 52, topPipeHeight, 'pipe', this.pipeFrameIndex)
                     .setFlipY(true)
                     .setOrigin(0.5, 1);
 
@@ -243,7 +253,7 @@ export class GameScene extends BaseScene {
 
             if (spawn == 1) {
 
-                const pBottom = this.add.tileSprite(spawnPipesX, availableHeight, 52, bottomPipeHeight, 'pipe', this.pipeFrameIndex )
+                const pBottom = this.add.tileSprite(spawnPipesX, availableHeight, 52, bottomPipeHeight, 'pipe', this.pipeFrameIndex)
                     .setOrigin(0.5, 1);
                 this.physics.add.existing(pBottom, false);
                 this.pipes.add(pBottom);
@@ -254,8 +264,8 @@ export class GameScene extends BaseScene {
             const spawnFoodY = spawn == 0 ? Phaser.Math.RND.between(topPipeHeight, screenHeight - scoreZoneHeight) : Phaser.Math.RND.between(0, topPipeHeight);
             this.addFood(spawnPipesX, spawnFoodY)
 
-            if(this.nextDinoPosY==-1){
-                this.nextDinoPosY = spawn == 0 ? topPipeHeight +((screenHeight - scoreZoneHeight)/2) : topPipeHeight/2;
+            if (this.nextDinoPosY == -1) {
+                this.nextDinoPosY = spawn == 0 ? topPipeHeight + ((screenHeight - scoreZoneHeight) / 2) : topPipeHeight / 2;
 
             }
         }
@@ -310,7 +320,7 @@ export class GameScene extends BaseScene {
         body.setAllowRotation(false);
 
         this.ball = this.add.image(screenWidth / 1.25, screenHeight / 2, 'ball').setOrigin(0.5);
-        this.ball.setOrigin(-1,0.5).setDepth(1);
+        this.ball.setOrigin(-1, 0.5).setDepth(1);
 
     }
 
@@ -340,14 +350,14 @@ export class GameScene extends BaseScene {
             .setDepth(1)
             .setVisible(false);
 
-        this.physics.add.existing(this.landscape, false); 
+        this.physics.add.existing(this.landscape, false);
         ((body: Phaser.Physics.Arcade.Body) => {
             body.allowGravity = false;
             body.setCollideWorldBounds(true);
         })(this.landscape.body as Phaser.Physics.Arcade.Body)
 
 
-        this.physics.add.existing(this.landscapeTop, false); 
+        this.physics.add.existing(this.landscapeTop, false);
         ((body: Phaser.Physics.Arcade.Body) => {
             body.allowGravity = false;
             body.setCollideWorldBounds(true);
@@ -381,11 +391,11 @@ export class GameScene extends BaseScene {
             this.events.emit(INTERACT_EVENT);
         });
 
-        this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER).on('up', () => {
+        this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER).on('up', () => {
             this.events.emit(INTERACT_EVENT);
         });
 
-        this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE).on('up', () => {
+        this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE).on('up', () => {
             this.events.emit(INTERACT_EVENT);
         });
     }

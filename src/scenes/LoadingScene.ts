@@ -15,6 +15,7 @@ export class LoadingScene extends BaseScene {
         this.load.image('fireball', 'assets/images/fireball.png');
         this.load.image('food', 'assets/images/food.png');
         this.load.image('ball', 'assets/images/ball.png');
+        this.load.image('brush', 'assets/images/brush2.png');
 
         this.load.spritesheet('dino', 'assets/sprites/dino/dino.png', { frameWidth: 252, frameHeight: 200 });
         this.load.spritesheet('pipe', 'assets/sprites/pipes/pipes.png', { frameWidth: 52, frameHeight: 320 });
