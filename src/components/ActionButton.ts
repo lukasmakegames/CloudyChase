@@ -1,20 +1,10 @@
 
-export class ActionButton extends Phaser.GameObjects.Text {
+export class ActionButton extends Phaser.GameObjects.BitmapText {
     protected static readonly HOVER_SCALE = .95;
     protected static readonly TEXT_COLOR = "#970e22";
 
     constructor(scene: Phaser.Scene, label: string, posX: number, posY: number) {
-        super(scene, posX, posY, label, {
-            padding: {
-                left: 40,
-                right: 40,
-                top: 20,
-                bottom: 20
-            },
-            fontSize: "24px",
-            color: ActionButton.TEXT_COLOR,
-            backgroundColor: "white"
-        });
+        super(scene, posX, posY, 'font', label, 64);
 
         this.setOrigin(.5);
 
@@ -25,6 +15,10 @@ export class ActionButton extends Phaser.GameObjects.Text {
         this.on("pointerup", () => {
             this.setScale(1, 1);
         });
+
+        this.setDepth(5);
+
+        scene.add.rectangle(posX,posY,this.width+40,this.height+20,0xffffff)
    }
 
    public onClick(handleOnClick: () => void) {

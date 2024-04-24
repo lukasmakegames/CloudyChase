@@ -16,7 +16,7 @@ export default class MainMenu extends BaseScene {
         this.add.bitmapText(screenWidth / 2, screenHeight / 5, 'font', 'Cloudy Chase', 128)
             .setOrigin(.5);
 
-        const playGameButton = new ActionButton(this, "playGameButton", screenWidth * 0.5, screenHeight / 2)
+        const playGameButton = new ActionButton(this, "Play Game", screenWidth * 0.5, screenHeight / 2)
             .onClick(() => {
                 this.StartNewGame();
             });

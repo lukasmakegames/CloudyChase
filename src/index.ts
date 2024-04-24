@@ -7,7 +7,7 @@ import { GameOverScene } from "./scenes/GameOverScene";
 
 new Phaser.Game({
     type: Phaser.AUTO,
-    backgroundColor: 0x3333AA,
+    backgroundColor: 0x000000,
     scale: {
         width: 1920,
         height: 1080,

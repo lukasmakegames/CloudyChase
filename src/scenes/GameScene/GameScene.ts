@@ -1,14 +1,10 @@
 import { GameBackground } from "../../components/GameBackground";
-import { ScoresWidget } from "../../components/ScoresWidget";
-import { BestScoreService } from "../../components/services/BestScoreService";
 import { GAME_OVER_SCENE, GAME_SCENE } from "../../constants/scenes";
 import { BaseScene } from "../BaseScene";
 import { INTERACT_EVENT } from "./events";
 
 // @TODO add music
-// @TODO add final animation
-// @TODO add power bar text
-// @TODO add enemy bar text
+// @TODO add final win animation screen
 
 
 export class GameScene extends BaseScene {
@@ -43,9 +39,6 @@ export class GameScene extends BaseScene {
     protected wingAudio: Phaser.Sound.BaseSound;
     protected hitAudio: Phaser.Sound.BaseSound;
 
-    protected scoreWidget: ScoresWidget;
-    protected score: number = 0;
-
     protected lastDinoPosY: number = -1;
     protected nextDinoPosY: number = -1;
 
@@ -70,7 +63,6 @@ export class GameScene extends BaseScene {
         this.isGameOver = false;
         this.isGameStarted = false;
         this.isTurned = false;
-        this.score = 0;
         
         this.nextDinoPosY = -1;
         const { screenHeight, screenWidth } = this.getScreenSize();
@@ -86,7 +78,6 @@ export class GameScene extends BaseScene {
         this._setupPipes();
         this._setupHealthBar();
         this._setupPowerBar();
-        this._setupScoreWidget();
         this._setUpClickToPlayWidget();
         this._registerInteractionEvents();
 
@@ -114,7 +105,6 @@ export class GameScene extends BaseScene {
 
         this.foods = this.physics.add.group();
         this.physics.add.overlap(this.bird, this.foods, (_, food) => {
-            this.scoreWidget.setScore(++this.score);
             this.power+=100;
             if (this.power>200)
                 this.power=200;
@@ -199,12 +189,9 @@ export class GameScene extends BaseScene {
 
             this.hitAudio.play();
             this.bird.setVelocity(0);
-            this.registry.set('score', this.score);
-            BestScoreService.getInstance().updateIfScoreBetter(this.score);
 
             this.bird.destroy();
             this.emitter.stop();
-            this.scoreWidget.destroy();
 
             this.game.scene.start(GAME_OVER_SCENE);
         }
@@ -243,8 +230,7 @@ export class GameScene extends BaseScene {
 
             if (this.power>=5){
                 this.addFireball(this.bird.x, this.bird.y);
-                const scale= Phaser.Math.Clamp(this.power/50,1,4);
-                this.power-=5*scale;
+                this.power-=5;
                 this._updatePowerBar()
 
             }
@@ -252,7 +238,7 @@ export class GameScene extends BaseScene {
     }
 
     private _updatePowerBar(){
-        this.powerBar.width=this.power*1000/200;
+        this.powerBar.width=this.power*200/200;
         
         
         if (this.power>150){
@@ -366,14 +352,21 @@ export class GameScene extends BaseScene {
 
     private _setupHealthBar(){
         const { screenHeight, screenWidth } = this.getScreenSize();
-        this.dinoHealthBar = this.add.rectangle(screenWidth / 2, screenHeight - 20,1000,40,0xee4266).setOrigin(0.5);
+        this.dinoHealthBar = this.add.rectangle(screenWidth / 2, screenHeight - 30,1000,40,0xee4266).setOrigin(0.5);
         this.dinoHealthBar.setDepth(3);
+
+        this.add.text(screenWidth / 2, screenHeight - 30, "Enemy Health")
+        .setOrigin(.5).setDepth(4);
     }
 
     private _setupPowerBar(){
         const { screenHeight, screenWidth } = this.getScreenSize();
-        this.powerBar = this.add.rectangle(screenWidth / 2, screenHeight - 60,1000,40,0x3bceac).setOrigin(0.5);
+        this.powerBar = this.add.rectangle(screenWidth / 2, 60,200,40,0x3bceac).setOrigin(0.5);
         this.powerBar.setDepth(3);
+
+        
+        this.add.text(screenWidth / 2, 60, "Power",{color:'0x000000'})
+        .setOrigin(.5).setDepth(4);
     }
 
     private _setupBackground() {
@@ -410,15 +403,9 @@ export class GameScene extends BaseScene {
         this.ball.setOrigin(-1, 0.5).setDepth(1);
     }
 
-    private _setupScoreWidget() {
-        const { screenHeight } = this.getScreenSize();
-        this.scoreWidget = ScoresWidget.AddToScene(this, screenHeight / 8);
-        this.scoreWidget.setDepth(5).setOrigin(.5);
-    }
-
     private _setUpClickToPlayWidget() {
         const { screenWidth, screenHeight } = this.getScreenSize();
-        this.interactToPlayWidget = this.add.text(screenWidth / 2, screenHeight / 8 * 3, "interactToPlay")
+        this.interactToPlayWidget = this.add.text(screenWidth / 2, screenHeight / 8 * 3, "Jump To Play")
             .setOrigin(.5);
     }
 
