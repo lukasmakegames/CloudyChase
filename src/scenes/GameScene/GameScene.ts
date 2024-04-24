@@ -3,6 +3,7 @@ import { WIN_SCENE, GAME_OVER_SCENE, GAME_SCENE } from "../../constants/scenes";
 import { BaseScene } from "../BaseScene";
 import { INTERACT_EVENT } from "./events";
 
+// @TODO add leaderboards with time
 
 export class GameScene extends BaseScene {
 
