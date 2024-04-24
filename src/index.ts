@@ -6,7 +6,7 @@ import { LoadingScene } from "./scenes/LoadingScene";
 import { GameOverScene } from "./scenes/GameOverScene";
 
 new Phaser.Game({
-    type: Phaser.CANVAS,
+    type: Phaser.AUTO,
     backgroundColor: 0x3333AA,
     scale: {
         width: 1920,

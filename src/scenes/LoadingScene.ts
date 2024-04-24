@@ -10,7 +10,6 @@ export class LoadingScene extends BaseScene {
         this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.fnt');
         this.load.image('bg', 'assets/images/background-night.png');
         this.load.image('landscape', 'assets/images/base.png');
-        this.load.image("left_menu_image", "assets/images/main-menu-image.png");
         this.load.image('bird', 'assets/images/avatar.png');
         this.load.image('fireball', 'assets/images/fireball.png');
         this.load.image('food', 'assets/images/food.png');

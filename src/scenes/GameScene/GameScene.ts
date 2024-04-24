@@ -5,8 +5,6 @@ import { GAME_OVER_SCENE, GAME_SCENE } from "../../constants/scenes";
 import { BaseScene } from "../BaseScene";
 import { INTERACT_EVENT } from "./events";
 
-// @TODO add health bar dino
-// @TODO add damage red tint dino
 // @TODO food add power
 // @TODO power bar
 // @TODO special attack
@@ -51,6 +49,11 @@ export class GameScene extends BaseScene {
     protected nextDinoPosY: number = -1;
 
     protected emitter: Phaser.GameObjects.Particles.ParticleEmitter;
+    protected hsv:Phaser.Types.Display.ColorObject[];
+    protected index:number;
+
+    protected dinoHealth:number;
+    protected dinoHealthBar:Phaser.GameObjects.Rectangle;
 
     constructor() {
         super(GAME_SCENE);
@@ -65,16 +68,19 @@ export class GameScene extends BaseScene {
         this.isGameStarted = false;
         this.isTurned = false;
         this.score = 0;
-
+        
         this.nextDinoPosY = -1;
         const { screenHeight, screenWidth } = this.getScreenSize();
         this.lastDinoPosY = screenHeight / 2;
+
+        this.dinoHealth=200;
 
         this._setupBackground();
         this._setupLandscape();
         this._setupBird();
         this._setupDino();
         this._setupPipes();
+        this._setupHealthBar();
         this._setupScoreWidget();
         this._setUpClickToPlayWidget();
         this._registerInteractionEvents();
@@ -87,6 +93,20 @@ export class GameScene extends BaseScene {
             fireball.destroy();
         });
 
+        this.fireballs = this.physics.add.group();
+        this.physics.add.overlap(this.dino, this.fireballs, (_, fireball) => {
+            fireball.destroy();
+            this.dinoHealth-=Phaser.Math.RND.between(1,2);
+            this.dino.setTint(0xff0000);
+            setTimeout(()=>this.dino.setTint(0xffffff),300);
+            this.dinoHealthBar.width=this.dinoHealth*1000/200
+            if (this.dinoHealth<=0){
+                this.dino.destroy();
+                this.dino.destroy();
+                this.dinoHealthBar.destroy();
+                this.endGame();
+            }
+        });
 
         this.foods = this.physics.add.group();
         this.physics.add.overlap(this.bird, this.foods, (_, food) => {
@@ -100,6 +120,10 @@ export class GameScene extends BaseScene {
         this.time.addEvent({ delay: GameScene.SPAWN_PIPES_INTERVAL, callback: this.addPipes, callbackScope: this, loop: true });
         this.time.addEvent({ delay: GameScene.SPAWN_PIPES_INTERVAL * 3, callback: this.deletePipes, callbackScope: this, loop: true });
 
+
+        this.hsv = Phaser.Display.Color.HSVColorWheel();
+        this.index = 0;
+
         this.emitter = this.add.particles(0, 32, 'brush', {
             speedX: -1000,
             lifespan: 200,
@@ -107,6 +131,7 @@ export class GameScene extends BaseScene {
             follow: this.bird,
         });
     }
+
 
     public update(time: number, d: number) {
         const delta = d * 0.1;
@@ -159,6 +184,15 @@ export class GameScene extends BaseScene {
             }
 
         }
+
+        this.index++;
+
+        if (this.index === 360)
+        {
+            this.index = 0;
+        }
+
+        this.emitter.particleTint = this.hsv[this.index].color;
     }
 
     public endGame() {
@@ -171,6 +205,7 @@ export class GameScene extends BaseScene {
             BestScoreService.getInstance().updateIfScoreBetter(this.score);
 
             this.bird.destroy();
+            this.emitter.stop();
             this.scoreWidget.destroy();
 
             this.game.scene.start(GAME_OVER_SCENE);
@@ -289,6 +324,11 @@ export class GameScene extends BaseScene {
         }
     }
 
+    private _setupHealthBar(){
+        const { screenHeight, screenWidth } = this.getScreenSize();
+        this.dinoHealthBar = this.add.rectangle(screenWidth / 2, screenHeight - 80,1000,40,0xff0000).setOrigin(0.5);
+        this.dinoHealthBar.setDepth(3);
+    }
     private _setupBackground() {
         this.bgSprite = GameBackground.AddToScene(this);
     }
@@ -321,7 +361,6 @@ export class GameScene extends BaseScene {
 
         this.ball = this.add.image(screenWidth / 1.25, screenHeight / 2, 'ball').setOrigin(0.5);
         this.ball.setOrigin(-1, 0.5).setDepth(1);
-
     }
 
     private _setupScoreWidget() {
