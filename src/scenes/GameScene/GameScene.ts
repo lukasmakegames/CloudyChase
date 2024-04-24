@@ -5,9 +5,10 @@ import { GAME_OVER_SCENE, GAME_SCENE } from "../../constants/scenes";
 import { BaseScene } from "../BaseScene";
 import { INTERACT_EVENT } from "./events";
 
-// @TODO food add power
-// @TODO power bar
-// @TODO special attack
+// @TODO add music
+// @TODO add final animation
+// @TODO add power bar text
+// @TODO add enemy bar text
 
 
 export class GameScene extends BaseScene {
@@ -49,11 +50,13 @@ export class GameScene extends BaseScene {
     protected nextDinoPosY: number = -1;
 
     protected emitter: Phaser.GameObjects.Particles.ParticleEmitter;
-    protected hsv:Phaser.Types.Display.ColorObject[];
-    protected index:number;
 
     protected dinoHealth:number;
     protected dinoHealthBar:Phaser.GameObjects.Rectangle;
+
+    protected power:number;
+    protected powerBar:Phaser.GameObjects.Rectangle;
+
 
     constructor() {
         super(GAME_SCENE);
@@ -74,6 +77,7 @@ export class GameScene extends BaseScene {
         this.lastDinoPosY = screenHeight / 2;
 
         this.dinoHealth=200;
+        this.power=0;
 
         this._setupBackground();
         this._setupLandscape();
@@ -81,6 +85,7 @@ export class GameScene extends BaseScene {
         this._setupDino();
         this._setupPipes();
         this._setupHealthBar();
+        this._setupPowerBar();
         this._setupScoreWidget();
         this._setUpClickToPlayWidget();
         this._registerInteractionEvents();
@@ -93,17 +98,16 @@ export class GameScene extends BaseScene {
             fireball.destroy();
         });
 
-        this.fireballs = this.physics.add.group();
         this.physics.add.overlap(this.dino, this.fireballs, (_, fireball) => {
             fireball.destroy();
-            this.dinoHealth-=Phaser.Math.RND.between(1,2);
+            const damage=Phaser.Math.RND.between(1,2)* (fireball as Phaser.GameObjects.Image).scale
+            console.log(damage)
+            this.dinoHealth-=damage;
             this.dino.setTint(0xff0000);
             setTimeout(()=>this.dino.setTint(0xffffff),300);
             this.dinoHealthBar.width=this.dinoHealth*1000/200
             if (this.dinoHealth<=0){
                 this.dino.destroy();
-                this.dino.destroy();
-                this.dinoHealthBar.destroy();
                 this.endGame();
             }
         });
@@ -111,7 +115,11 @@ export class GameScene extends BaseScene {
         this.foods = this.physics.add.group();
         this.physics.add.overlap(this.bird, this.foods, (_, food) => {
             this.scoreWidget.setScore(++this.score);
+            this.power+=100;
+            if (this.power>200)
+                this.power=200;
             food.destroy();
+            this._updatePowerBar()
         });
 
         this.wingAudio = this.sound.add('wing');
@@ -121,15 +129,14 @@ export class GameScene extends BaseScene {
         this.time.addEvent({ delay: GameScene.SPAWN_PIPES_INTERVAL * 3, callback: this.deletePipes, callbackScope: this, loop: true });
 
 
-        this.hsv = Phaser.Display.Color.HSVColorWheel();
-        this.index = 0;
-
         this.emitter = this.add.particles(0, 32, 'brush', {
             speedX: -1000,
             lifespan: 200,
             scale: { start: 2, end: 0 },
             follow: this.bird,
         });
+
+        this._updatePowerBar();
     }
 
 
@@ -184,15 +191,6 @@ export class GameScene extends BaseScene {
             }
 
         }
-
-        this.index++;
-
-        if (this.index === 360)
-        {
-            this.index = 0;
-        }
-
-        this.emitter.particleTint = this.hsv[this.index].color;
     }
 
     public endGame() {
@@ -243,16 +241,56 @@ export class GameScene extends BaseScene {
 
             this.wingAudio.play();
 
-            this.addFireball(this.bird.x, this.bird.y);
+            if (this.power>=5){
+                this.addFireball(this.bird.x, this.bird.y);
+                const scale= Phaser.Math.Clamp(this.power/50,1,4);
+                this.power-=5*scale;
+                this._updatePowerBar()
+
+            }
         }
     }
 
+    private _updatePowerBar(){
+        this.powerBar.width=this.power*1000/200;
+        
+        
+        if (this.power>150){
+            this.emitter.particleTint =0xffffff;
+            this.powerBar.fillColor = 0xffffff;
+    
+    }
+        else if (this.power>75){
+            this.emitter.particleTint =0xffff00;
+            this.powerBar.fillColor = 0xffff00;
+        
+        }
+        
+        else{
+            this.emitter.particleTint =0xff00ff;
+            this.powerBar.fillColor = 0xff00ff;
+
+        }
+
+    }
+
     protected addFireball(x: integer, y: integer) {
-        const fireball = this.add.image(x, y, "fireball").setOrigin(0.5, 1);
-        this.physics.add.existing(fireball, false);
+        const fireball = this.physics.add.image(x, y, "fireball").setOrigin(0.5, 1);
+        
         this.fireballs.add(fireball);
 
+        const { body, displayWidth, displayHeight } = fireball;
+
+        body.setSize(displayWidth / 2, displayHeight / 2);
+
         (fireball.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
+
+        const scale= Phaser.Math.Clamp(this.power/50,1,4);
+        fireball.setScale(scale);
+
+        fireball.setTint(this.powerBar.fillColor);
+
+        setTimeout(()=>fireball.destroy(),300*scale*scale*scale);
     }
 
 
@@ -307,6 +345,8 @@ export class GameScene extends BaseScene {
     }
 
     protected addFood(x: integer, y: integer) {
+        if (Phaser.Math.RND.between(1,3)>1)
+            return
         const food = this.add.image(x, y, "food").setOrigin(0.5).setScale(0.5);
         this.physics.add.existing(food, false);
         this.foods.add(food);
@@ -326,9 +366,16 @@ export class GameScene extends BaseScene {
 
     private _setupHealthBar(){
         const { screenHeight, screenWidth } = this.getScreenSize();
-        this.dinoHealthBar = this.add.rectangle(screenWidth / 2, screenHeight - 80,1000,40,0xff0000).setOrigin(0.5);
+        this.dinoHealthBar = this.add.rectangle(screenWidth / 2, screenHeight - 20,1000,40,0xee4266).setOrigin(0.5);
         this.dinoHealthBar.setDepth(3);
     }
+
+    private _setupPowerBar(){
+        const { screenHeight, screenWidth } = this.getScreenSize();
+        this.powerBar = this.add.rectangle(screenWidth / 2, screenHeight - 60,1000,40,0x3bceac).setOrigin(0.5);
+        this.powerBar.setDepth(3);
+    }
+
     private _setupBackground() {
         this.bgSprite = GameBackground.AddToScene(this);
     }
