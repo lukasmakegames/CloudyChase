@@ -21,7 +21,15 @@ export class LoadingScene extends BaseScene {
         this.load.spritesheet('medal', 'assets/sprites/medals/medals.png', { frameWidth: 44, frameHeight: 44 });
 
         this.load.audio('wing', 'assets/audio/fireball.mp3');
+        this.load.audio('you-win', 'assets/audio/you-win-sequence.mp3');
+        this.load.audio('eat', 'assets/audio/eating-chips.mp3');
         this.load.audio('hit', 'assets/audio/ough.ogg');
+        this.load.audio('music', 'assets/audio/creepy-devil-dance.ogg');
+
+        
+
+
+        
     }
 
     protected create() {

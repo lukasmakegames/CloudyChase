@@ -4,6 +4,7 @@ import MainMenu from "./scenes/MenuScene";
 import { GameScene } from "./scenes/GameScene";
 import { LoadingScene } from "./scenes/LoadingScene";
 import { GameOverScene } from "./scenes/GameOverScene";
+import { WinScene } from "./scenes/WinScene";
 
 new Phaser.Game({
     type: Phaser.AUTO,
@@ -20,5 +21,5 @@ new Phaser.Game({
             debug: !true 
         }
     },
-    scene: [LoadingScene, MainMenu, GameScene, GameOverScene],
+    scene: [LoadingScene, MainMenu, GameScene, GameOverScene, WinScene],
 });
