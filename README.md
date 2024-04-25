@@ -7,6 +7,10 @@
 
  You chase a flying dinosaur above a cloud that has stolen a magic ball from you, and you shoot fireballs to stop it and retrieve the ball.
 
+ # Theme
+
+You have to eat food to increase your powers.
+
  # Challenges
 
  Open source: this
