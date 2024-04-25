@@ -10,19 +10,16 @@ export class LoadingScene extends BaseScene {
         this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.fnt');
         this.load.image('bg', 'assets/images/background-night.png');
         this.load.image('landscape', 'assets/images/base.png');
-        this.load.image('bird', 'assets/images/avatar.png');
-        this.load.image('fireball', 'assets/images/fireball.png');
-        this.load.image('food', 'assets/images/food.png');
-        this.load.image('ball', 'assets/images/ball.png');
         this.load.image('brush', 'assets/images/brush2.png');
+
+        this.load.atlas('other','assets/sprites/other/other.png','assets/sprites/other/other.json');
 
         this.load.spritesheet('dino', 'assets/sprites/dino/dino.png', { frameWidth: 252, frameHeight: 200 });
         this.load.spritesheet('pipe', 'assets/sprites/pipes/pipes.png', { frameWidth: 52, frameHeight: 320 });
-        this.load.spritesheet('medal', 'assets/sprites/medals/medals.png', { frameWidth: 44, frameHeight: 44 });
 
-        this.load.audio('wing', 'assets/audio/fireball.mp3');
-        this.load.audio('you-win', 'assets/audio/you-win-sequence.mp3');
-        this.load.audio('eat', 'assets/audio/eating-chips.mp3');
+        this.load.audio('wing', 'assets/audio/fireball.ogg');
+        this.load.audio('you-win', 'assets/audio/you-win-sequence.ogg');
+        this.load.audio('eat', 'assets/audio/eating-chips.ogg');
         this.load.audio('hit', 'assets/audio/ough.ogg');
         this.load.audio('music', 'assets/audio/creepy-devil-dance.ogg');
 

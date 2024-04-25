@@ -3,7 +3,6 @@ import { WIN_SCENE, GAME_OVER_SCENE, GAME_SCENE } from "../../constants/scenes";
 import { BaseScene } from "../BaseScene";
 import { INTERACT_EVENT } from "./events";
 
-// @TODO add leaderboards with time
 
 export class GameScene extends BaseScene {
 
@@ -327,7 +326,7 @@ export class GameScene extends BaseScene {
     }
 
     protected addFireball(x: integer, y: integer) {
-        const fireball = this.physics.add.image(x, y, "fireball").setOrigin(0.5, 1);
+        const fireball = this.physics.add.image(x, y, 'other','fireball').setOrigin(0.5, 1);
 
         this.fireballs.add(fireball);
 
@@ -399,7 +398,7 @@ export class GameScene extends BaseScene {
     protected addFood(x: integer, y: integer) {
         if (Phaser.Math.RND.between(1, 3) > 1)
             return
-        const food = this.add.image(x, y, "food").setOrigin(0.5).setScale(0.5);
+        const food = this.add.image(x, y, 'other','food').setOrigin(0.5).setScale(0.5);
         this.physics.add.existing(food, false);
         this.foods.add(food);
 
@@ -441,7 +440,7 @@ export class GameScene extends BaseScene {
 
     private _setupBird() {
         const { screenHeight, screenWidth } = this.getScreenSize();
-        this.bird = this.physics.add.image(screenWidth / 2, screenHeight / 2, 'bird').setOrigin(0.5);
+        this.bird = this.physics.add.image(screenWidth / 2, screenHeight / 2, 'other','avatar').setOrigin(0.5);
         const { body, displayWidth, displayHeight } = this.bird;
 
         this.bird.setOrigin(0.5, 0.5).setDepth(2);
@@ -465,7 +464,7 @@ export class GameScene extends BaseScene {
         body.setCollideWorldBounds(false);
         body.setAllowRotation(false);
 
-        this.ball = this.add.image(screenWidth / 1.25, screenHeight / 2, 'ball').setOrigin(0.5);
+        this.ball = this.add.image(screenWidth / 1.25, screenHeight / 2, 'other','ball').setOrigin(0.5);
         this.ball.setOrigin(-1, 0.5).setDepth(1);
     }
 
@@ -530,11 +529,11 @@ export class GameScene extends BaseScene {
             this.events.emit(INTERACT_EVENT);
         });
 
-        this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER).on('up', () => {
+        this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER).on('down', () => {
             this.events.emit(INTERACT_EVENT);
         });
 
-        this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE).on('up', () => {
+        this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE).on('down', () => {
             this.events.emit(INTERACT_EVENT);
         });
     }

@@ -1,0 +1,104 @@
+{
+	"textures": [
+		{
+			"image": "other.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 128,
+				"h": 467
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "fireball",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 126,
+						"h": 121
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 126,
+						"h": 121
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 126,
+						"h": 121
+					}
+				},
+				{
+					"filename": "avatar",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 248,
+						"h": 186
+					},
+					"spriteSourceSize": {
+						"x": 63,
+						"y": 17,
+						"w": 122,
+						"h": 152
+					},
+					"frame": {
+						"x": 1,
+						"y": 124,
+						"w": 122,
+						"h": 152
+					}
+				},
+				{
+					"filename": "food",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 125,
+						"h": 137
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 2,
+						"w": 122,
+						"h": 122
+					},
+					"frame": {
+						"x": 1,
+						"y": 278,
+						"w": 122,
+						"h": 122
+					}
+				},
+				{
+					"filename": "ball",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 64,
+						"h": 64
+					},
+					"frame": {
+						"x": 1,
+						"y": 402,
+						"w": 64,
+						"h": 64
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:6143a2cd373c907c9dce6ed1de1dba34:f4a427e123693d24290e4921971d93ef:0833637fc2e8b44b92184a899394fcdd$"
+	}
+}
